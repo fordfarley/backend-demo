@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
 
   socket.on("message", async ({ username, message }) => {
     const messageData = {
-        userId: socket.id,
+        user_id: socket.id,
         username: username || "Anónimo",
         message: message,
     };
