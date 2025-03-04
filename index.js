@@ -26,8 +26,20 @@ const PORT = process.env.PORT || 3001;
 const users = {}; // Guardará los nombres de los usuarios
 
 // Evento de conexión de un cliente
-io.on("connection", (socket) => {
+io.on("connection",async (socket) => {
   console.log(`Usuario conectado: ${socket.id}`);
+  const { data: messages, error } = await supabase
+    .from("messages")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Error al obtener mensajes de Supabase:", error);
+    return;
+  }
+
+  // Enviar los mensajes guardados al cliente recién conectado
+  socket.emit("messageHistory", messages);
 
   // Guardar el nombre del usuario cuando lo envíe
   socket.on("setUsername", (username) => {
