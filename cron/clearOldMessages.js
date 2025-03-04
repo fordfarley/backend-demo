@@ -7,7 +7,7 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 
 // Función para borrar mensajes antiguos
 const clearOldMessages = () => {
-  cron.schedule("0 0 * * *", async () => {
+  cron.schedule("*/5 * * * *", async () => {
     console.log("Ejecutando tarea programada: Limpiar mensajes antiguos");
 
     const { error } = await supabase

@@ -4,6 +4,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
+const clearOldMessages = require("./cron/clearOldMessages");
 
 // Configurar Supabase
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
@@ -22,6 +23,8 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
+
+clearOldMessages();
 
 const users = {}; // Guardará los nombres de los usuarios
 
