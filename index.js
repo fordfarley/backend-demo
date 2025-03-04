@@ -35,11 +35,11 @@ io.on("connection", (socket) => {
     console.log(`Usuario ${socket.id} se llama ${username}`);
   });
 
-  socket.on("message", async({message}) => {
+  socket.on("message", async ({ username, message }) => {
     const messageData = {
-      userId: socket.id,
-      username: users[socket.id] || "Anónimo", // Si no tiene nombre, usa "Anónimo"
-      message:message,
+        userId: socket.id,
+        username: username || "Anónimo",
+        message: message,
     };
 
      // Guardar el mensaje en Supabase
