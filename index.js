@@ -3,6 +3,10 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const { createClient } = require("@supabase/supabase-js");
+
+// Configurar Supabase
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 const app = express();
 const server = http.createServer(app);
@@ -31,12 +35,22 @@ io.on("connection", (socket) => {
     console.log(`Usuario ${socket.id} se llama ${username}`);
   });
 
-  socket.on("message", (text) => {
+  socket.on("message", async({message}) => {
     const messageData = {
       userId: socket.id,
       username: users[socket.id] || "Anónimo", // Si no tiene nombre, usa "Anónimo"
-      text,
+      message:message,
     };
+
+     // Guardar el mensaje en Supabase
+     const { error } = await supabase
+     .from("messages")
+     .insert([messageData]);
+
+   if (error) {
+     console.error("Error al guardar en Supabase:", error.message);
+     return;
+   }
 
     console.log("Mensaje recibido:", messageData);
     io.emit("message", messageData);
