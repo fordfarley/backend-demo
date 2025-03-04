@@ -10,10 +10,12 @@ const clearOldMessages = () => {
   cron.schedule("*/5 * * * *", async () => {
     console.log("Ejecutando tarea programada: Limpiar mensajes antiguos");
 
+    const cutoffTime = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+
     const { error } = await supabase
       .from("messages")
       .delete()
-      .lt("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+      .lt("created_at", cutoffTime);
 
     if (error) {
       console.error("Error al borrar mensajes antiguos:", error);
