@@ -73,11 +73,13 @@ io.on("connection",async (socket) => {
 
   // Evento cuando un usuario está escribiendo
   socket.on("typing", (username) => {
+    console.log(`${username} está escribiendo...`);
     socket.broadcast.emit("typing", username);
   });
 
   // Evento cuando deja de escribir
   socket.on("stopTyping", () => {
+    console.log("Usuario dejó de escribir");
     socket.broadcast.emit("stopTyping");
   });
 
