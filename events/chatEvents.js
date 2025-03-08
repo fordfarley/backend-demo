@@ -6,7 +6,7 @@ module.exports = (io, socket) => {
   // Evento para manejar mensajes nuevos
   socket.on("message", async ({ username, message }) => {
     const messageData = {
-      userId: socket.id,
+      user_id: socket.id,
       username: username || "Anónimo",
       message: message,
     };
